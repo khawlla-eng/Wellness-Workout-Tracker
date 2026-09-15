@@ -18,7 +18,7 @@ function switchMainTab(tabName) {
   }
 }
 
-// حساب السعرات التلقائية المستهدفة بناءً على الهدف والوزن والعمر
+// حساب السعرات التلقائية المستهدفة
 function calculateDailyTarget() {
   const gender = document.getElementById('gender').value;
   const age = parseFloat(document.getElementById('userAge').value) || 25;
@@ -238,10 +238,9 @@ function sendData() {
   })
   .then(() => {
     loading.style.display = 'none';
-    alert(`✨ تم حفظ البيانات بنجاح لـ (${name}) في قوقل شيت!`);
+    alert('✨ تم حفظ البيانات بنجاح!');
     form.reset();
     
-    // إعادة تعيين الحقول الخاصة والملاحظات
     document.getElementById('cycleNote').style.display = 'none';
     document.getElementById('waterNote').style.display = 'none';
     document.getElementById('targetDisplay').style.display = 'none';
@@ -250,7 +249,6 @@ function sendData() {
     document.getElementById('presetExercisesList').innerHTML = '';
     document.getElementById('customExercisesContainer').innerHTML = '';
     
-    // إعادة ضبط تاريخ اليوم تلقائياً بعد التفريغ
     const today = new Date().toISOString().split('T')[0];
     document.getElementById('logDate').value = today;
 
