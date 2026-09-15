@@ -342,3 +342,16 @@ input:focus, select:focus, textarea:focus {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+/* إخفاء أيقونة التقويم الافتراضية في متصفحات كروم وسفاري */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  background: transparent;
+  bottom: 0;
+  color: transparent;
+  cursor: pointer;
+  height: auto;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: auto;
+}
