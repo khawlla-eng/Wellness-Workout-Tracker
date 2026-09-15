@@ -3,200 +3,346 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>💖 Wellness & Workout Tracker</title>
+  <title>Wellness & Workout Tracker</title>
   <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<div class="container">
-  <form id="visitorForm">
-    
-    <!-- الصفحة الأولى -->
-    <div id="page1" class="page active">
-      <h2>💖 Wellness & Workout Tracker</h2>
-      
-      <div class="form-group">
-        <label>👤 الاسم الكامل:</label>
-        <input type="text" id="userName" name="userName" placeholder="اكتبي اسمكِ هنا..." required>
-      </div>
+  <div class="container">
+    <header class="main-header">
+      <h1>💖 Wellness & Workout Tracker</h1>
+      <nav class="nav-tabs">
+        <button class="nav-btn active" onclick="switchMainTab('tracker')">📝 تتبع اليوميات</button>
+        <button class="nav-btn" onclick="switchMainTab('calculator')">🧮 حاسبة السعرات</button>
+      </nav>
+    </header>
 
-      <div class="grid-2">
-        <div class="form-group">
-          <label>📅 الأسبوع:</label>
-          <select id="weekNumber" name="weekNumber">
-            <option value="الأسبوع 1">الأسبوع 1</option>
-            <option value="الأسبوع 2">الأسبوع 2</option>
-            <option value="الأسبوع 3">الأسبوع 3</option>
-            <option value="الأسبوع 4">الأسبوع 4</option>
-            <option value="الأسبوع 5">الأسبوع 5</option>
-            <option value="الأسبوع 6">الأسبوع 6</option>
-            <option value="الأسبوع 7">الأسبوع 7</option>
-            <option value="الأسبوع 8">الأسبوع 8</option>
-            <option value="الأسبوع 9">الأسبوع 9</option>
-            <option value="الأسبوع 10">الأسبوع 10</option>
-            <option value="الأسبوع 11">الأسبوع 11</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>📆 اليوم:</label>
-          <select id="dayOfWeek" name="dayOfWeek">
-            <option value="الأحد">الأحد</option>
-            <option value="الإثنين">الإثنين</option>
-            <option value="الثلاثاء">الثلاثاء</option>
-            <option value="الأربعاء">الأربعاء</option>
-            <option value="الخميس">الخميس</option>
-            <option value="الجمعة">الجمعة</option>
-            <option value="السبت">السبت</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label>📆 التاريخ:</label>
-        <input type="date" id="logDate" name="logDate">
-      </div>
-
-      <div class="form-group">
-        <label>⚖️ الوزن الحالي (كجم):</label>
-        <input type="number" step="0.1" name="weight" placeholder="مثال: 65.5">
-      </div>
-
-      <div class="form-group">
-        <label>🎀 الحالة الهرمونية:</label>
-        <select id="cyclePhase" name="cyclePhase" onchange="handleCycleChange()">
-          <option value="أيام عادية">أيام عادية</option>
-          <option value="فترة تبويض">فترة تبويض</option>
-          <option value="قبل الدورة">قبل الدورة</option>
-          <option value="أسبوع الدورة">أسبوع الدورة</option>
-        </select>
-        <div id="cycleNote" class="dynamic-note"></div>
-      </div>
-
-      <div class="form-group">
-        <label>💧 كمية الماء (لتر):</label>
-        <input type="number" step="0.1" id="waterIntake" name="waterIntake" placeholder="مثال: 2.5" oninput="handleWaterChange()">
-        <div id="waterNote" class="water-note"></div>
-      </div>
-
-      <div class="form-group">
-        <label>🥗 الالتزام بالأكل والبروتين:</label>
-        <input type="text" name="dietCommitment" placeholder="ممتاز / متوسط">
-      </div>
-
-      <div class="form-group">
-        <label>📝 ملاحظات وتغيرات اليوم:</label>
-        <textarea name="userNotes" rows="2" placeholder="أي شعور أو ملاحظة..."></textarea>
-      </div>
-
-      <div class="btn-group">
-        <button type="button" class="btn-submit" onclick="sendData()">💾 حفظ بدون تمرين</button>
-        <button type="button" class="btn-next" onclick="nextPage()">التالي (تسجيل التمرين) ➔</button>
-      </div>
-    </div>
-
-    <!-- الصفحة الثانية -->
-    <div id="page2" class="page">
-      <h2>🏋️‍♀️ تفاصيل التمرين اليومي</h2>
-
-      <div id="fixedDisplay" class="fixed-info"></div>
-
-      <div class="form-group">
-        <label>🎯 نوع النشاط الرئيسي:</label>
-        <select id="activityType" name="activityType" onchange="handleActivityTypeChange()">
-          <option value="">-- اختاري نوع النشاط --</option>
-          <option value="تمرين جيم">تمرين جيم (Gym + الكارديو)</option>
-          <option value="كارديو فقط">كارديو فقط (Cardio Only)</option>
-        </select>
-      </div>
-
-      <!-- قسم الجيم (المقاومة) -->
-      <div id="gymSection" style="display: none;">
-        <h3>💪 تمرين الجيم (المقاومة)</h3>
-        <div class="form-group">
-          <label>تقسيم التمرين:</label>
-          <select id="gymSplitSelect" name="gymSplit" onchange="handleGymSplitChange()">
-            <option value="">-- اختاري نوع التمرين --</option>
-            <option value="علوي">علوي (Upper Body)</option>
-            <option value="سفلي">سفلي (Lower Body)</option>
-            <option value="دفع">دفع (Push)</option>
-            <option value="سحب">سحب (Pull)</option>
-            <option value="أرجل">أرجل (Legs)</option>
-            <option value="جسم كامل">جسم كامل (Full Body)</option>
-            <option value="custom">مخصص (Custom)...</option>
-          </select>
-        </div>
+    <!-- SECTION 1: TRACKER APP -->
+    <main id="trackerSection" class="tab-content active">
+      <form id="visitorForm">
         
-        <div class="form-group" id="customGymGroup" style="display: none;">
-          <input type="text" name="customGymName" placeholder="اكتبي اسم تقسيم التمرين المخصص...">
+        <!-- PAGE 1: Personal & Health Metrics -->
+        <div id="page1" class="page active">
+          <h2 class="section-title">👤 البيانات الأساسية وتحديد الهدف</h2>
+          
+          <div class="form-group">
+            <label>الاسم الكامل <span class="required">*</span></label>
+            <input type="text" id="userName" name="userName" placeholder="اكتبي اسمكِ المفصل (احفظيه للاستخدام الدائم)" required>
+          </div>
+
+          <div class="grid-3">
+            <div class="form-group">
+              <label>الجنس</label>
+              <select id="gender" name="gender" onchange="handleGenderChange()">
+                <option value="أنثى">أنثى 🌸</option>
+                <option value="ذكر">ذكر 👤</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>العمر (سنة)</label>
+              <input type="number" id="userAge" name="userAge" placeholder="25">
+            </div>
+            <div class="form-group">
+              <label>الطول (سم)</label>
+              <input type="number" id="userHeight" name="userHeight" placeholder="165">
+            </div>
+          </div>
+
+          <div class="card-box" style="background:#F0F4FE; border-color:#D0E1FD;">
+            <div class="form-group">
+              <label style="color:#1A73E8;">🎯 ما هو هدفك الرياضي الحالي؟</label>
+              <select id="userGoal" name="userGoal" onchange="calculateDailyTarget()">
+                <option value="خسارة وزن (-0.5 كجم/أسبوع)">خسارة وزن (تنشيف / نزول كجم 0.5 أسبوعياً) 📉</option>
+                <option value="المحافظة على الوزن">المحافظة على الوزن والثبات ⚖️</option>
+                <option value="زيادة وزن / بناء عضل (+0.5 كجم/أسبوع)">زيادة وزن / بناء عضلات 📈</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>مستوى النشاط اليومي العام</label>
+              <select id="userActivityLevel" name="userActivityLevel" onchange="calculateDailyTarget()">
+                <option value="1.2">خامل (عمل مكتبي، بدون تمارين)</option>
+                <option value="1.375">نشاط خفيف (تمارين 1-3 أيام/أسبوع)</option>
+                <option value="1.55">نشاط متوسط (تمارين 3-5 أيام/أسبوع)</option>
+                <option value="1.725">نشاط عالٍ (تمارين 6-7 أيام/أسبوع)</option>
+              </select>
+            </div>
+            <div id="targetDisplay" class="alert-info" style="display:none; text-align:center; background:#E8F5E9; color:#2E7D32;">
+              🎯 <strong>السعرات اليومية المستهدفة لهدفك:</strong> <span id="targetCaloriesText" style="font-size:1.2rem; font-weight:bold;">0</span> سعرة حرارية/يوم
+            </div>
+          </div>
+
+          <!-- الحقول المخفية لنقل السعرات والهدف للشيت -->
+          <input type="hidden" id="calculatedTargetCalories" name="targetCalories" value="">
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label>التاريخ</label>
+              <input type="date" id="logDate" name="logDate">
+            </div>
+            <div class="form-group">
+              <label>الوزن الحالي (كجم)</label>
+              <input type="number" step="0.1" id="weight" name="weight" placeholder="مثال: 62.5" oninput="calculateDailyTarget()">
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label>الأسبوع</label>
+              <select id="weekNumber" name="weekNumber">
+                <option value="الأسبوع 1">الأسبوع 1</option>
+                <option value="الأسبوع 2">الأسبوع 2</option>
+                <option value="الأسبوع 3">الأسبوع 3</option>
+                <option value="الأسبوع 4">الأسبوع 4</option>
+                <option value="الأسبوع 5">الأسبوع 5</option>
+                <option value="الأسبوع 6">الأسبوع 6</option>
+                <option value="الأسبوع 7">الأسبوع 7</option>
+                <option value="الأسبوع 8">الأسبوع 8</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>اليوم</label>
+              <select id="dayOfWeek" name="dayOfWeek">
+                <option value="الأحد">الأحد</option>
+                <option value="الإثنين">الإثنين</option>
+                <option value="الثلاثاء">الثلاثاء</option>
+                <option value="الأربعاء">الأربعاء</option>
+                <option value="الخميس">الخميس</option>
+                <option value="الجمعة">الجمعة</option>
+                <option value="السبت">السبت</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label>كمية شرب الماء (لتر)</label>
+              <input type="number" step="0.5" id="waterIntake" name="waterIntake" placeholder="مثال: 2.5" oninput="handleWaterChange()">
+              <p id="waterNote" class="dynamic-note" style="display:none;"></p>
+            </div>
+            <!-- Diet Commitment -->
+            <div class="form-group">
+              <label>الالتزام بالتغذية اليوم</label>
+              <select id="dietCommitment" name="dietCommitment" onchange="handleDietChange()">
+                <option value="ممتاز">ممتاز ⭐⭐⭐</option>
+                <option value="جيد جداً">جيد جداً ⭐⭐</option>
+                <option value="جيد">جيد ⭐</option>
+                <option value="مقبول">مقبول / محايد ⚖️</option>
+                <option value="أخرى">أخرى (تحديد تفاصيل)...</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group" id="customDietGroup" style="display:none;">
+            <input type="text" id="customDietDetails" name="customDietDetails" placeholder="اكتبي تفاصيل التغذية اليومية...">
+          </div>
+
+          <!-- Hormonal Phase (Females Only) -->
+          <div class="form-group" id="cycleGroup">
+            <label>التغيرات الهرمونية (للهرمونات والنشاط) 🌸</label>
+            <select id="cyclePhase" name="cyclePhase" onchange="handleCycleChange()">
+              <option value="أيام عادية">أيام عادية</option>
+              <option value="قبل الدورة">قبل الدورة (PMS)</option>
+              <option value="أسبوع الدورة">أسبوع الدورة</option>
+              <option value="فترة تبويض">فترة تبويض</option>
+            </select>
+            <p id="cycleNote" class="dynamic-note" style="display:none;"></p>
+          </div>
+
+          <!-- 15-Day Analysis Request -->
+          <div class="card-box">
+            <label style="font-weight:bold; color:#2D3436;">📧 هل ترغب/ين في حفظ بياناتك واستلام تقرير تحليلي كل 15 يوم؟</label>
+            <select id="wantReport" name="wantReport" onchange="handleReportChange()">
+              <option value="لا">لا، تسجيل بيانات يومي فقط</option>
+              <option value="نعم">نعم، أرغب في تقرير تحليلي دوري 📊</option>
+            </select>
+            
+            <div id="reportDetailsGroup" style="display:none; margin-top:12px;">
+              <div class="grid-2">
+                <div class="form-group">
+                  <label>وسيلة التواصل المفضلة</label>
+                  <select id="contactMethod" name="contactMethod">
+                    <option value="البريد الإلكتروني">البريد الإلكتروني</option>
+                    <option value="رقم الهاتف / الواتساب">رقم الهاتف / الواتساب</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>البريد أو الرقم</label>
+                  <input type="text" id="contactInfo" name="contactInfo" placeholder="أدخل الإيميل أو رقم الهاتف...">
+                </div>
+              </div>
+              <div class="alert-info">
+                ⚠️ <strong>تنبيه مهم:</strong> احفظ اسمك المسجل أعلاه جيداً واستخدمه بنفس الإملاء دائماً لتجميع بياناتك في ملفك الخاص بشكل صحيح.
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>ملاحظات يومية عامة</label>
+            <textarea id="userNotes" name="userNotes" rows="2" placeholder="كيف كان يومك أو طاقتك؟"></textarea>
+          </div>
+
+          <button type="button" class="btn btn-primary" onclick="nextPage()">التالي: التمارين والنشاط ➔</button>
         </div>
 
-        <!-- تذكير الإحماء -->
-        <div id="warmupNote" class="dynamic-note" style="background-color: #EBF8FF; border-right-color: #3182CE; color: #2B6CB0;"></div>
+        <!-- PAGE 2: Activities & Workouts -->
+        <div id="page2" class="page">
+          <div id="fixedDisplay" class="sticky-info"></div>
 
-        <!-- التمارين المقترحة -->
-        <div id="presetExercisesList"></div>
+          <h2 class="section-title">🏋️‍♀️ نشاط اليوم والتمارين</h2>
+          
+          <div class="form-group">
+            <label>نوع النشاط اليومي</label>
+            <select id="activityType" name="activityType" onchange="handleActivityTypeChange()">
+              <option value="قياسات فقط">قياسات وتغذية فقط (يوم راحة)</option>
+              <option value="تمرين جيم">تمرين جيم (أثقال / مقاومة)</option>
+              <option value="كارديو فقط">كارديو فقط (مشي، جري، دراجة...)</option>
+            </select>
+          </div>
 
-        <!-- التمارين المخصصة المضافة -->
-        <div id="customExercisesContainer"></div>
+          <!-- GYM SECTION -->
+          <div id="gymSection" style="display: none;">
+            <div class="form-group">
+              <label>تقسيم جدول الجيم</label>
+              <select id="gymSplitSelect" name="gymSplit" onchange="handleGymSplitChange()">
+                <option value="">-- اختاري التقسيم --</option>
+                <option value="علوي">جزء علوي (Upper Body)</option>
+                <option value="سفلي">جزء سفلي (Lower Body)</option>
+                <option value="custom">تقسيم مخصص / آخر...</option>
+              </select>
+            </div>
 
-        <button type="button" class="btn-add" onclick="addCustomExerciseRow()">➕ إضافة تمرين إضافي / مخصص</button>
-      </div>
+            <div class="form-group" id="customGymGroup" style="display: none;">
+              <input type="text" name="customGymName" placeholder="اكتبي اسم التقسيم (مثال: دفع / سحب / أرجل)...">
+            </div>
 
-      <!-- قسم الكارديو -->
-      <div id="cardioSection" style="display: none;">
-        <h3>🏃‍♀️ تمارين الكارديو</h3>
-        <div class="form-group">
-          <label>نوع الكارديو:</label>
-          <select id="cardioTypeSelect" name="cardioType" onchange="toggleCustomCardio()">
-            <option value="بدون كارديو">بدون كارديو</option>
-            <option value="مشي على الجهاز">مشي على الجهاز (Treadmill)</option>
-            <option value="مشي داخلي">مشي داخلي</option>
-            <option value="دراجة هوائية">دراجة هوائية</option>
-            <option value="دراجة داخلية">دراجة داخلية (Bike)</option>
-            <option value="درج">درج (Stairmaster)</option>
-            <option value="custom">مخصص (Custom)...</option>
-          </select>
+            <p id="warmupNote" class="dynamic-note" style="display: none;"></p>
+
+            <div id="presetExercisesList"></div>
+
+            <h4 style="margin-top: 15px; color:#4A4A4A;">➕ تمارين مخصصة إضافية</h4>
+            <div id="customExercisesContainer"></div>
+            <button type="button" class="btn btn-secondary" onclick="addCustomExerciseRow()">+ إضافة تمرين إضافي</button>
+          </div>
+
+          <!-- CARDIO SECTION -->
+          <div id="cardioSection" style="display: none; margin-top:20px;">
+            <h3 class="sub-title">🏃‍♀️ تفاصيل الكارديو</h3>
+            <div class="form-group">
+              <label>نوع الكارديو</label>
+              <select id="cardioTypeSelect" name="cardioType" onchange="toggleCustomCardio()">
+                <option value="مشي سريع">مشي سريع</option>
+                <option value="جري / سير">جري / سير</option>
+                <option value="دراجة">دراجة ثابتة / هوائية</option>
+                <option value="درج">درج (Stairmaster)</option>
+                <option value="سباحة">سباحة</option>
+                <option value="custom">نوع آخر...</option>
+              </select>
+            </div>
+
+            <div class="form-group" id="customCardioGroup" style="display: none;">
+              <input type="text" name="customCardioName" placeholder="اسم الكارديو المخصص...">
+            </div>
+
+            <div class="grid-3">
+              <div class="form-group">
+                <label>المدة (دقيقة)</label>
+                <input type="number" name="cardioDuration" placeholder="30">
+              </div>
+              <div class="form-group">
+                <label>المسافة (كم)</label>
+                <input type="number" step="0.1" name="cardioDistance" placeholder="3.5">
+              </div>
+              <div class="form-group">
+                <label>السعرات</label>
+                <input type="number" name="cardioCalories" placeholder="200">
+              </div>
+            </div>
+          </div>
+
+          <div class="button-group" style="margin-top:25px;">
+            <button type="button" class="btn btn-secondary" onclick="prevPage()">⬅ العودة للبيانات</button>
+            <button type="button" class="btn btn-success" onclick="sendData()">✨ حفظ وإرسال لجدول الزوار</button>
+          </div>
         </div>
-        
-        <div class="form-group" id="customCardioGroup" style="display: none;">
-          <input type="text" name="customCardioName" placeholder="اكتبي نوع الكارديو المخصص...">
+
+      </form>
+    </main>
+
+    <!-- SECTION 2: CALORIE CALCULATOR -->
+    <section id="calculatorSection" class="tab-content">
+      <h2 class="section-title">🧮 حاسبة السعرات الحرارية والماكروز</h2>
+      <div class="card-box">
+        <div class="grid-2">
+          <div class="form-group">
+            <label>الجنس</label>
+            <select id="calcGender">
+              <option value="female">أنثى 🌸</option>
+              <option value="male">ذكر 👤</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>العمر (سنة)</label>
+            <input type="number" id="calcAge" placeholder="مثال: 25">
+          </div>
         </div>
 
         <div class="grid-2">
           <div class="form-group">
-            <label>المسافة (كم):</label>
-            <input type="number" step="0.1" name="cardioDistance" placeholder="3.5">
+            <label>الوزن (كجم)</label>
+            <input type="number" step="0.1" id="calcWeight" placeholder="مثال: 65">
           </div>
           <div class="form-group">
-            <label>المدة (دقيقة):</label>
-            <input type="number" name="cardioDuration" placeholder="30">
+            <label>الطول (سم)</label>
+            <input type="number" id="calcHeight" placeholder="مثال: 165">
           </div>
         </div>
 
-        <div class="grid-2">
-          <div class="form-group">
-            <label>نبضات القلب (BPM):</label>
-            <input type="number" name="cardioBpm" placeholder="130">
+        <div class="form-group">
+          <label>مستوى النشاط اليومي</label>
+          <select id="calcActivity">
+            <option value="1.2">خامل (مكتب ولا تمارين)</option>
+            <option value="1.375">نشاط خفيف (تمارين 1-3 أيام/أسبوع)</option>
+            <option value="1.55">نشاط متوسط (تمارين 3-5 أيام/أسبوع)</option>
+            <option value="1.725">نشاط عالٍ (تمارين 6-7 أيام/أسبوع)</option>
+          </select>
+        </div>
+
+        <button type="button" class="btn btn-primary" onclick="calculateCalories()">احسب احتياجي الآن ✨</button>
+      </div>
+
+      <div id="calcResults" class="card-box" style="display:none; margin-top:20px; text-align:center;">
+        <h3 style="color:#6C5CE7;">📊 نتائج احتياجك اليومي من السعرات:</h3>
+        <hr style="border: 0.5px solid #eee; margin:15px 0;">
+        
+        <div class="grid-3" style="margin-bottom:15px;">
+          <div class="res-card" style="background:#E3F2FD;">
+            <h4>⚖️ المحافظة</h4>
+            <p id="resMaintain" class="res-num">0</p>
+            <span>سعرة/يوم</span>
           </div>
-          <div class="form-group">
-            <label>السعرات الحرارية:</label>
-            <input type="number" name="cardioCalories" placeholder="200">
+          <div class="res-card" style="background:#E8F5E9;">
+            <h4>📉 نزول ذكي (-0.5 كجم)</h4>
+            <p id="resWeightLoss" class="res-num">0</p>
+            <span>سعرة/يوم</span>
+          </div>
+          <div class="res-card" style="background:#FFF3E0;">
+            <h4>📈 زيادة وزن (+0.5 كجم)</h4>
+            <p id="resWeightGain" class="res-num">0</p>
+            <span>سعرة/يوم</span>
           </div>
         </div>
       </div>
+    </section>
 
-      <div class="btn-group">
-        <button type="button" class="btn-prev" onclick="prevPage()">➔ العودة للقياسات</button>
-        <button type="button" class="btn-submit" onclick="sendData()">💾 حفظ وإرسال البيانات</button>
-      </div>
+    <!-- LOADING OVERLAY -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+      <div class="spinner"></div>
+      <p>جاري حفظ بياناتكِ في الشيت الخاص بك...</p>
     </div>
 
-  </form>
-</div>
+  </div>
 
-<div id="loadingOverlay" class="loading-overlay">🌸 جاري حفظ وتوزيع البيانات في قوقل شيت...</div>
-
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
