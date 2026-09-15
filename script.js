@@ -18,7 +18,7 @@ function switchMainTab(tabName) {
   }
 }
 
-// حساب السعرات التلقائية المستهدفة بناء على الهدف والوزن والعمر
+// حساب السعرات التلقائية المستهدفة بناءً على الهدف والوزن والعمر
 function calculateDailyTarget() {
   const gender = document.getElementById('gender').value;
   const age = parseFloat(document.getElementById('userAge').value) || 25;
@@ -156,7 +156,7 @@ function addCustomExerciseRow() {
   const container = document.getElementById('customExercisesContainer');
   const card = document.createElement('div');
   card.className = 'exercise-card';
-  card.style.borderColor = '#B5EAD7';
+  card.style.borderColor = '#A29BFE';
   card.innerHTML = `
     <div class="form-group" style="margin-bottom:8px;">
       <input type="text" name="custom_ex_name_${customExCount}" placeholder="اسم التمرين المخصص (مثال: Cable Fly)...">
@@ -240,11 +240,20 @@ function sendData() {
     loading.style.display = 'none';
     alert(`✨ تم حفظ البيانات بنجاح لـ (${name}) في قوقل شيت!`);
     form.reset();
+    
+    // إعادة تعيين الحقول الخاصة والملاحظات
     document.getElementById('cycleNote').style.display = 'none';
     document.getElementById('waterNote').style.display = 'none';
     document.getElementById('targetDisplay').style.display = 'none';
+    document.getElementById('customDietGroup').style.display = 'none';
+    document.getElementById('reportDetailsGroup').style.display = 'none';
     document.getElementById('presetExercisesList').innerHTML = '';
     document.getElementById('customExercisesContainer').innerHTML = '';
+    
+    // إعادة ضبط تاريخ اليوم تلقائياً بعد التفريغ
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('logDate').value = today;
+
     prevPage();
   })
   .catch(error => {
