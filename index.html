@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>💖 Wellness & Workout Tracker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+  <form id="visitorForm">
+    
+    <!-- الصفحة الأولى -->
+    <div id="page1" class="page active">
+      <h2>💖 Wellness & Workout Tracker</h2>
+      
+      <div class="form-group">
+        <label>👤 الاسم الكامل:</label>
+        <input type="text" id="userName" name="userName" placeholder="اكتبي اسمكِ هنا..." required>
+      </div>
+
+      <div class="grid-2">
+        <div class="form-group">
+          <label>📅 الأسبوع:</label>
+          <select id="weekNumber" name="weekNumber">
+            <option value="الأسبوع 1">الأسبوع 1</option>
+            <option value="الأسبوع 2">الأسبوع 2</option>
+            <option value="الأسبوع 3">الأسبوع 3</option>
+            <option value="الأسبوع 4">الأسبوع 4</option>
+            <option value="الأسبوع 5">الأسبوع 5</option>
+            <option value="الأسبوع 6">الأسبوع 6</option>
+            <option value="الأسبوع 7">الأسبوع 7</option>
+            <option value="الأسبوع 8">الأسبوع 8</option>
+            <option value="الأسبوع 9">الأسبوع 9</option>
+            <option value="الأسبوع 10">الأسبوع 10</option>
+            <option value="الأسبوع 11">الأسبوع 11</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>📆 اليوم:</label>
+          <select id="dayOfWeek" name="dayOfWeek">
+            <option value="الأحد">الأحد</option>
+            <option value="الإثنين">الإثنين</option>
+            <option value="الثلاثاء">الثلاثاء</option>
+            <option value="الأربعاء">الأربعاء</option>
+            <option value="الخميس">الخميس</option>
+            <option value="الجمعة">الجمعة</option>
+            <option value="السبت">السبت</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>📆 التاريخ:</label>
+        <input type="date" id="logDate" name="logDate">
+      </div>
+
+      <div class="form-group">
+        <label>⚖️ الوزن الحالي (كجم):</label>
+        <input type="number" step="0.1" name="weight" placeholder="مثال: 65.5">
+      </div>
+
+      <div class="form-group">
+        <label>🎀 الحالة الهرمونية:</label>
+        <select id="cyclePhase" name="cyclePhase" onchange="handleCycleChange()">
+          <option value="أيام عادية">أيام عادية</option>
+          <option value="فترة تبويض">فترة تبويض</option>
+          <option value="قبل الدورة">قبل الدورة</option>
+          <option value="أسبوع الدورة">أسبوع الدورة</option>
+        </select>
+        <div id="cycleNote" class="dynamic-note"></div>
+      </div>
+
+      <div class="form-group">
+        <label>💧 كمية الماء (لتر):</label>
+        <input type="number" step="0.1" id="waterIntake" name="waterIntake" placeholder="مثال: 2.5" oninput="handleWaterChange()">
+        <div id="waterNote" class="water-note"></div>
+      </div>
+
+      <div class="form-group">
+        <label>🥗 الالتزام بالأكل والبروتين:</label>
+        <input type="text" name="dietCommitment" placeholder="ممتاز / متوسط">
+      </div>
+
+      <div class="form-group">
+        <label>📝 ملاحظات وتغيرات اليوم:</label>
+        <textarea name="userNotes" rows="2" placeholder="أي شعور أو ملاحظة..."></textarea>
+      </div>
+
+      <div class="btn-group">
+        <button type="button" class="btn-submit" onclick="sendData()">💾 حفظ بدون تمرين</button>
+        <button type="button" class="btn-next" onclick="nextPage()">التالي (تسجيل التمرين) ➔</button>
+      </div>
+    </div>
+
+    <!-- الصفحة الثانية -->
+    <div id="page2" class="page">
+      <h2>🏋️‍♀️ تفاصيل التمرين اليومي</h2>
+
+      <div id="fixedDisplay" class="fixed-info"></div>
+
+      <div class="form-group">
+        <label>🎯 نوع النشاط الرئيسي:</label>
+        <select id="activityType" name="activityType" onchange="handleActivityTypeChange()">
+          <option value="">-- اختاري نوع النشاط --</option>
+          <option value="تمرين جيم">تمرين جيم (Gym + الكارديو)</option>
+          <option value="كارديو فقط">كارديو فقط (Cardio Only)</option>
+        </select>
+      </div>
+
+      <!-- قسم الجيم (المقاومة) -->
+      <div id="gymSection" style="display: none;">
+        <h3>💪 تمرين الجيم (المقاومة)</h3>
+        <div class="form-group">
+          <label>تقسيم التمرين:</label>
+          <select id="gymSplitSelect" name="gymSplit" onchange="handleGymSplitChange()">
+            <option value="">-- اختاري نوع التمرين --</option>
+            <option value="علوي">علوي (Upper Body)</option>
+            <option value="سفلي">سفلي (Lower Body)</option>
+            <option value="دفع">دفع (Push)</option>
+            <option value="سحب">سحب (Pull)</option>
+            <option value="أرجل">أرجل (Legs)</option>
+            <option value="جسم كامل">جسم كامل (Full Body)</option>
+            <option value="custom">مخصص (Custom)...</option>
+          </select>
+        </div>
+        
+        <div class="form-group" id="customGymGroup" style="display: none;">
+          <input type="text" name="customGymName" placeholder="اكتبي اسم تقسيم التمرين المخصص...">
+        </div>
+
+        <!-- تذكير الإحماء -->
+        <div id="warmupNote" class="dynamic-note" style="background-color: #EBF8FF; border-right-color: #3182CE; color: #2B6CB0;"></div>
+
+        <!-- التمارين المقترحة -->
+        <div id="presetExercisesList"></div>
+
+        <!-- التمارين المخصصة المضافة -->
+        <div id="customExercisesContainer"></div>
+
+        <button type="button" class="btn-add" onclick="addCustomExerciseRow()">➕ إضافة تمرين إضافي / مخصص</button>
+      </div>
+
+      <!-- قسم الكارديو -->
+      <div id="cardioSection" style="display: none;">
+        <h3>🏃‍♀️ تمارين الكارديو</h3>
+        <div class="form-group">
+          <label>نوع الكارديو:</label>
+          <select id="cardioTypeSelect" name="cardioType" onchange="toggleCustomCardio()">
+            <option value="بدون كارديو">بدون كارديو</option>
+            <option value="مشي على الجهاز">مشي على الجهاز (Treadmill)</option>
+            <option value="مشي داخلي">مشي داخلي</option>
+            <option value="دراجة هوائية">دراجة هوائية</option>
+            <option value="دراجة داخلية">دراجة داخلية (Bike)</option>
+            <option value="درج">درج (Stairmaster)</option>
+            <option value="custom">مخصص (Custom)...</option>
+          </select>
+        </div>
+        
+        <div class="form-group" id="customCardioGroup" style="display: none;">
+          <input type="text" name="customCardioName" placeholder="اكتبي نوع الكارديو المخصص...">
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label>المسافة (كم):</label>
+            <input type="number" step="0.1" name="cardioDistance" placeholder="3.5">
+          </div>
+          <div class="form-group">
+            <label>المدة (دقيقة):</label>
+            <input type="number" name="cardioDuration" placeholder="30">
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label>نبضات القلب (BPM):</label>
+            <input type="number" name="cardioBpm" placeholder="130">
+          </div>
+          <div class="form-group">
+            <label>السعرات الحرارية:</label>
+            <input type="number" name="cardioCalories" placeholder="200">
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-group">
+        <button type="button" class="btn-prev" onclick="prevPage()">➔ العودة للقياسات</button>
+        <button type="button" class="btn-submit" onclick="sendData()">💾 حفظ وإرسال البيانات</button>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<div id="loadingOverlay" class="loading-overlay">🌸 جاري حفظ وتوزيع البيانات في قوقل شيت...</div>
+
+<script src="script.js"></script>
+</body>
+</html>
