@@ -238,7 +238,7 @@ function sendData() {
   })
   .then(() => {
     loading.style.display = 'none';
-    alert('✨ تم حفظ البيانات');
+    alert('✨ تم حفظ البيانات بنجاح');
     form.reset();
     
     document.getElementById('cycleNote').style.display = 'none';
