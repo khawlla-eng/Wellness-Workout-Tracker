@@ -1,4 +1,4 @@
-const scriptURL = 'https://script.google.com/macros/s/AKfycbxvr0rGtjTRsszw9JxIiG_yHhFzk8RoPbajCw70a4nTRCO1wVlkHhsjoggv5A04N19k/exec';
+const scriptURL = 'https://script.google.com/macros/s/AKfycbxSdtDMVJtpKb1YfQDwtKfolbc22bUpZ4qkcOT6CufD9lT23yu2IBRocSY4RHMzYouK/exec';
 
 document.addEventListener('DOMContentLoaded', () => {
   const today = new Date().toISOString().split('T')[0];
@@ -18,7 +18,7 @@ function switchMainTab(tabName) {
   }
 }
 
-// حساب السعرات التلقائية المستهدفة
+// حساب السعرات التلقائية المستهدفة بناءً على الهدف والوزن والعمر
 function calculateDailyTarget() {
   const gender = document.getElementById('gender').value;
   const age = parseFloat(document.getElementById('userAge').value) || 25;
@@ -238,7 +238,7 @@ function sendData() {
   })
   .then(() => {
     loading.style.display = 'none';
-    alert('✨ تم حفظ البيانات بنجاح!');
+    alert('✨ تم حفظ البيانات');
     form.reset();
     
     document.getElementById('cycleNote').style.display = 'none';
