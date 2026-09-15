@@ -5,13 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wellness & Workout Tracker</title>
   <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <div class="container">
+  <div class="app-container">
     <header class="main-header">
-      <h1>💖 Wellness & Workout Tracker</h1>
+      <div class="brand">
+        <span class="brand-icon">✨</span>
+        <h1>Wellness & Workout Tracker</h1>
+      </div>
       <nav class="nav-tabs">
         <button class="nav-btn active" onclick="switchMainTab('tracker')">📝 تتبع اليوميات</button>
         <button class="nav-btn" onclick="switchMainTab('calculator')">🧮 حاسبة السعرات</button>
@@ -22,7 +25,7 @@
     <main id="trackerSection" class="tab-content active">
       <form id="visitorForm">
         
-        <!-- PAGE 1: Personal & Health Metrics -->
+        <!-- PAGE 1: Personal, Health & Nutrition Metrics -->
         <div id="page1" class="page active">
           <h2 class="section-title">👤 البيانات الأساسية وتحديد الهدف</h2>
           
@@ -49,11 +52,12 @@
             </div>
           </div>
 
-          <div class="card-box" style="background:#F0F4FE; border-color:#D0E1FD;">
+          <!-- Goal Box -->
+          <div class="ui-card goal-card">
             <div class="form-group">
-              <label style="color:#1A73E8;">🎯 ما هو هدفك الرياضي الحالي؟</label>
+              <label class="card-label">🎯 ما هو هدفك الرياضي الحالي؟</label>
               <select id="userGoal" name="userGoal" onchange="calculateDailyTarget()">
-                <option value="خسارة وزن (-0.5 كجم/أسبوع)">خسارة وزن (تنشيف / نزول كجم 0.5 أسبوعياً) 📉</option>
+                <option value="خسارة وزن (-0.5 كجم/أسبوع)">خسارة وزن (تنشيف / نزول 0.5 كجم أسبوعياً) 📉</option>
                 <option value="المحافظة على الوزن">المحافظة على الوزن والثبات ⚖️</option>
                 <option value="زيادة وزن / بناء عضل (+0.5 كجم/أسبوع)">زيادة وزن / بناء عضلات 📈</option>
               </select>
@@ -67,12 +71,11 @@
                 <option value="1.725">نشاط عالٍ (تمارين 6-7 أيام/أسبوع)</option>
               </select>
             </div>
-            <div id="targetDisplay" class="alert-info" style="display:none; text-align:center; background:#E8F5E9; color:#2E7D32;">
-              🎯 <strong>السعرات اليومية المستهدفة لهدفك:</strong> <span id="targetCaloriesText" style="font-size:1.2rem; font-weight:bold;">0</span> سعرة حرارية/يوم
+            <div id="targetDisplay" class="target-badge" style="display:none;">
+              🎯 السعرات اليومية المستهدفة لهدفك: <span id="targetCaloriesText">0</span> سعرة/يوم
             </div>
           </div>
 
-          <!-- الحقول المخفية لنقل السعرات والهدف للشيت -->
           <input type="hidden" id="calculatedTargetCalories" name="targetCalories" value="">
 
           <div class="grid-2">
@@ -114,44 +117,72 @@
             </div>
           </div>
 
+          <!-- NEW NUTRITION & MACROS SECTION -->
+          <h2 class="section-title" style="margin-top:25px;">🥗 سجل التغذية والماكروز اليومية</h2>
+          <div class="ui-card macros-card">
+            <div class="grid-2">
+              <div class="form-group">
+                <label>إجمالي السعرات المأكولة (kcal)</label>
+                <input type="number" id="eatenCalories" name="eatenCalories" placeholder="مثال: 1650">
+              </div>
+              <div class="form-group">
+                <label>الالتزام الإجمالي بالتغذية</label>
+                <select id="dietCommitment" name="dietCommitment" onchange="handleDietChange()">
+                  <option value="ممتاز">ممتاز ⭐⭐⭐</option>
+                  <option value="جيد جداً">جيد جداً ⭐⭐</option>
+                  <option value="جيد">جيد ⭐</option>
+                  <option value="مقبول">مقبول / محايد ⚖️</option>
+                  <option value="أخرى">أخرى (تحديد تفاصيل)...</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid-3" style="margin-top:10px;">
+              <div class="form-group">
+                <label>البروتين 🍗 (جرام)</label>
+                <input type="number" id="proteinGrams" name="proteinGrams" placeholder="120g">
+              </div>
+              <div class="form-group">
+                <label>الكارب 🍚 (جرام)</label>
+                <input type="number" id="carbGrams" name="carbGrams" placeholder="180g">
+              </div>
+              <div class="form-group">
+                <label>الدهون 🥑 (جرام)</label>
+                <input type="number" id="fatGrams" name="fatGrams" placeholder="50g">
+              </div>
+            </div>
+
+            <div class="form-group" id="customDietGroup" style="display:none; margin-top:10px;">
+              <input type="text" id="customDietDetails" name="customDietDetails" placeholder="اكتبي تفاصيل التغذية اليومية...">
+            </div>
+
+            <div class="form-group" style="margin-top:10px;">
+              <label>وصف الوجبات اليومية (اختياري)</label>
+              <textarea id="mealDetails" name="mealDetails" rows="2" placeholder="مثال: الفطور بيضتين وتوست، الغداء دجاج وأرز..."></textarea>
+            </div>
+          </div>
+
           <div class="grid-2">
             <div class="form-group">
               <label>كمية شرب الماء (لتر)</label>
               <input type="number" step="0.5" id="waterIntake" name="waterIntake" placeholder="مثال: 2.5" oninput="handleWaterChange()">
               <p id="waterNote" class="dynamic-note" style="display:none;"></p>
             </div>
-            <!-- Diet Commitment -->
-            <div class="form-group">
-              <label>الالتزام بالتغذية اليوم</label>
-              <select id="dietCommitment" name="dietCommitment" onchange="handleDietChange()">
-                <option value="ممتاز">ممتاز ⭐⭐⭐</option>
-                <option value="جيد جداً">جيد جداً ⭐⭐</option>
-                <option value="جيد">جيد ⭐</option>
-                <option value="مقبول">مقبول / محايد ⚖️</option>
-                <option value="أخرى">أخرى (تحديد تفاصيل)...</option>
+            <div class="form-group" id="cycleGroup">
+              <label>التغيرات الهرمونية 🌸</label>
+              <select id="cyclePhase" name="cyclePhase" onchange="handleCycleChange()">
+                <option value="أيام عادية">أيام عادية</option>
+                <option value="قبل الدورة">قبل الدورة (PMS)</option>
+                <option value="أسبوع الدورة">أسبوع الدورة</option>
+                <option value="فترة تبويض">فترة تبويض</option>
               </select>
+              <p id="cycleNote" class="dynamic-note" style="display:none;"></p>
             </div>
           </div>
 
-          <div class="form-group" id="customDietGroup" style="display:none;">
-            <input type="text" id="customDietDetails" name="customDietDetails" placeholder="اكتبي تفاصيل التغذية اليومية...">
-          </div>
-
-          <!-- Hormonal Phase (Females Only) -->
-          <div class="form-group" id="cycleGroup">
-            <label>التغيرات الهرمونية (للهرمونات والنشاط) 🌸</label>
-            <select id="cyclePhase" name="cyclePhase" onchange="handleCycleChange()">
-              <option value="أيام عادية">أيام عادية</option>
-              <option value="قبل الدورة">قبل الدورة (PMS)</option>
-              <option value="أسبوع الدورة">أسبوع الدورة</option>
-              <option value="فترة تبويض">فترة تبويض</option>
-            </select>
-            <p id="cycleNote" class="dynamic-note" style="display:none;"></p>
-          </div>
-
           <!-- 15-Day Analysis Request -->
-          <div class="card-box">
-            <label style="font-weight:bold; color:#2D3436;">📧 هل ترغب/ين في حفظ بياناتك واستلام تقرير تحليلي كل 15 يوم؟</label>
+          <div class="ui-card report-card">
+            <label class="card-label">📧 هل ترغب/ين في حفظ بياناتك واستلام تقرير تحليلي كل 15 يوم؟</label>
             <select id="wantReport" name="wantReport" onchange="handleReportChange()">
               <option value="لا">لا، تسجيل بيانات يومي فقط</option>
               <option value="نعم">نعم، أرغب في تقرير تحليلي دوري 📊</option>
@@ -172,7 +203,7 @@
                 </div>
               </div>
               <div class="alert-info">
-                ⚠️ <strong>تنبيه مهم:</strong> احفظ اسمك المسجل أعلاه جيداً واستخدمه بنفس الإملاء دائماً لتجميع بياناتك في ملفك الخاص بشكل صحيح.
+                💡 <strong>تنبيه مهم:</strong> احفظ اسمك المسجل أعلاه جيداً واستخدمه بنفس الإملاء دائماً لتجميع بياناتك في ملفك الخاص بشكل صحيح.
               </div>
             </div>
           </div>
@@ -182,7 +213,7 @@
             <textarea id="userNotes" name="userNotes" rows="2" placeholder="كيف كان يومك أو طاقتك؟"></textarea>
           </div>
 
-          <button type="button" class="btn btn-primary" onclick="nextPage()">التالي: التمارين والنشاط ➔</button>
+          <button type="button" class="btn btn-primary btn-glow" onclick="nextPage()">التالي: التمارين والنشاط ➔</button>
         </div>
 
         <!-- PAGE 2: Activities & Workouts -->
@@ -220,7 +251,7 @@
 
             <div id="presetExercisesList"></div>
 
-            <h4 style="margin-top: 15px; color:#4A4A4A;">➕ تمارين مخصصة إضافية</h4>
+            <h4 style="margin-top: 20px; color:#6C5CE7; font-weight:700;">➕ تمارين مخصصة إضافية</h4>
             <div id="customExercisesContainer"></div>
             <button type="button" class="btn btn-secondary" onclick="addCustomExerciseRow()">+ إضافة تمرين إضافي</button>
           </div>
@@ -262,7 +293,7 @@
 
           <div class="button-group" style="margin-top:25px;">
             <button type="button" class="btn btn-secondary" onclick="prevPage()">⬅ العودة للبيانات</button>
-            <button type="button" class="btn btn-success" onclick="sendData()">✨ حفظ وإرسال لجدول الزوار</button>
+            <button type="button" class="btn btn-success btn-glow" onclick="sendData()">✨ حفظ وإرسال لجدول الزوار</button>
           </div>
         </div>
 
@@ -272,7 +303,7 @@
     <!-- SECTION 2: CALORIE CALCULATOR -->
     <section id="calculatorSection" class="tab-content">
       <h2 class="section-title">🧮 حاسبة السعرات الحرارية والماكروز</h2>
-      <div class="card-box">
+      <div class="ui-card">
         <div class="grid-2">
           <div class="form-group">
             <label>الجنس</label>
@@ -311,22 +342,22 @@
         <button type="button" class="btn btn-primary" onclick="calculateCalories()">احسب احتياجي الآن ✨</button>
       </div>
 
-      <div id="calcResults" class="card-box" style="display:none; margin-top:20px; text-align:center;">
-        <h3 style="color:#6C5CE7;">📊 نتائج احتياجك اليومي من السعرات:</h3>
-        <hr style="border: 0.5px solid #eee; margin:15px 0;">
+      <div id="calcResults" class="ui-card" style="display:none; margin-top:20px; text-align:center;">
+        <h3 style="color:#6C5CE7; font-weight:700;">📊 نتائج احتياجك اليومي من السعرات:</h3>
+        <hr style="border: 0; height:1px; background:#E2E8F0; margin:15px 0;">
         
         <div class="grid-3" style="margin-bottom:15px;">
-          <div class="res-card" style="background:#E3F2FD;">
+          <div class="res-card res-maintain">
             <h4>⚖️ المحافظة</h4>
             <p id="resMaintain" class="res-num">0</p>
             <span>سعرة/يوم</span>
           </div>
-          <div class="res-card" style="background:#E8F5E9;">
+          <div class="res-card res-loss">
             <h4>📉 نزول ذكي (-0.5 كجم)</h4>
             <p id="resWeightLoss" class="res-num">0</p>
             <span>سعرة/يوم</span>
           </div>
-          <div class="res-card" style="background:#FFF3E0;">
+          <div class="res-card res-gain">
             <h4>📈 زيادة وزن (+0.5 كجم)</h4>
             <p id="resWeightGain" class="res-num">0</p>
             <span>سعرة/يوم</span>
