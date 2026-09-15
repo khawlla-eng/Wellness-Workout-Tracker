@@ -1,10 +1,62 @@
-// رابط الـ Web App الخاص بـ Google Apps Script لملف قوقل شيت الزوار
 const scriptURL = 'https://script.google.com/macros/s/AKfycbxvr0rGtjTRsszw9JxIiG_yHhFzk8RoPbajCw70a4nTRCO1wVlkHhsjoggv5A04N19k/exec';
 
 document.addEventListener('DOMContentLoaded', () => {
   const today = new Date().toISOString().split('T')[0];
   document.getElementById('logDate').value = today;
 });
+
+function switchMainTab(tabName) {
+  document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+  if (tabName === 'tracker') {
+    document.querySelectorAll('.nav-btn')[0].classList.add('active');
+    document.getElementById('trackerSection').classList.add('active');
+  } else {
+    document.querySelectorAll('.nav-btn')[1].classList.add('active');
+    document.getElementById('calculatorSection').classList.add('active');
+  }
+}
+
+// حساب السعرات التلقائية المستهدفة بناء على الهدف والوزن والعمر
+function calculateDailyTarget() {
+  const gender = document.getElementById('gender').value;
+  const age = parseFloat(document.getElementById('userAge').value) || 25;
+  const height = parseFloat(document.getElementById('userHeight').value) || 165;
+  const weight = parseFloat(document.getElementById('weight').value);
+  const goal = document.getElementById('userGoal').value;
+  const activity = parseFloat(document.getElementById('userActivityLevel').value) || 1.2;
+
+  if (!weight) return;
+
+  let bmr = (10 * weight) + (6.25 * height) - (5 * age);
+  bmr = gender === 'أنثى' ? bmr - 161 : bmr + 5;
+  const tdee = Math.round(bmr * activity);
+
+  let target = tdee;
+  if (goal.includes('خسارة')) target = tdee - 500;
+  else if (goal.includes('زيادة')) target = tdee + 400;
+
+  document.getElementById('targetCaloriesText').innerText = target;
+  document.getElementById('calculatedTargetCalories').value = target;
+  document.getElementById('targetDisplay').style.display = 'block';
+}
+
+function handleGenderChange() {
+  const gender = document.getElementById('gender').value;
+  document.getElementById('cycleGroup').style.display = gender === 'أنثى' ? 'block' : 'none';
+  calculateDailyTarget();
+}
+
+function handleDietChange() {
+  const val = document.getElementById('dietCommitment').value;
+  document.getElementById('customDietGroup').style.display = val === 'أخرى' ? 'block' : 'none';
+}
+
+function handleReportChange() {
+  const val = document.getElementById('wantReport').value;
+  document.getElementById('reportDetailsGroup').style.display = val === 'نعم' ? 'block' : 'none';
+}
 
 function handleCycleChange() {
   const val = document.getElementById('cyclePhase').value;
@@ -138,13 +190,38 @@ function prevPage() {
   window.scrollTo(0, 0);
 }
 
+function calculateCalories() {
+  const gender = document.getElementById('calcGender').value;
+  const age = parseFloat(document.getElementById('calcAge').value);
+  const weight = parseFloat(document.getElementById('calcWeight').value);
+  const height = parseFloat(document.getElementById('calcHeight').value);
+  const activity = parseFloat(document.getElementById('calcActivity').value);
+
+  if (!age || !weight || !height) {
+    alert('الرجاء إدخال كافة البيانات (العمر، الوزن، الطول) بشكل صحيح!');
+    return;
+  }
+
+  let bmr = (10 * weight) + (6.25 * height) - (5 * age);
+  bmr = gender === 'female' ? bmr - 161 : bmr + 5;
+
+  const tdee = Math.round(bmr * activity);
+  const loss = Math.round(tdee - 500);
+  const gain = Math.round(tdee + 400);
+
+  document.getElementById('resMaintain').innerText = tdee;
+  document.getElementById('resWeightLoss').innerText = loss;
+  document.getElementById('resWeightGain').innerText = gain;
+  document.getElementById('calcResults').style.display = 'block';
+}
+
 function sendData() {
   const name = document.getElementById('userName').value.trim();
   if (!name) { alert('الرجاء كتابة الاسم الكامل أولاً!'); return; }
 
   const loading = document.getElementById('loadingOverlay');
   const form = document.getElementById('visitorForm');
-  loading.style.display = 'block';
+  loading.style.display = 'flex';
 
   const formData = new FormData(form);
   const searchParams = new URLSearchParams();
@@ -165,6 +242,7 @@ function sendData() {
     form.reset();
     document.getElementById('cycleNote').style.display = 'none';
     document.getElementById('waterNote').style.display = 'none';
+    document.getElementById('targetDisplay').style.display = 'none';
     document.getElementById('presetExercisesList').innerHTML = '';
     document.getElementById('customExercisesContainer').innerHTML = '';
     prevPage();
