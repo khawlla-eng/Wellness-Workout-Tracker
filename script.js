@@ -80,9 +80,9 @@ function handleWaterChange() {
   const note = document.getElementById('waterNote');
   if (isNaN(val) || val <= 0) { note.style.display = 'none'; return; }
   note.style.display = 'block';
-  if (val < 2) note.innerText = '💧 حاولي ولو نص إضافي!';
-  else if (val === 2.5) note.innerText = '✨ أنت تستطيعين نص إضافي!';
-  else if (val >= 3) note.innerText = '🎉 ممتاز للغاية (إنجاز عظيم يا جميلة!)';
+  if (val < 2) note.innerText = '💧 نص إضافي!';
+  else if (val === 2.5) note.innerText = '✨ أنت تستطيع نص إضافي!';
+  else if (val >= 3) note.innerText = '🎉 ممتاز للغايه!)';
   else note.style.display = 'none';
 }
 
